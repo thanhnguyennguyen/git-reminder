@@ -45,7 +45,7 @@ const filterMyIssue = (data) => {
 
 // get list PR waiting for my review
 const checkPendingReview = async () => {
-    let msg = "PR waiting for my review \\n"
+    let msg = "PR waiting for your review \\n"
     var result = []
     let authorizedRequest = await axios.create({
         timeout: 2000,
