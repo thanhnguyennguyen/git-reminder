@@ -46,7 +46,7 @@ const filterMyIssue = (data) => {
 // get list PR waiting for my review
 const checkPendingReview = async () => {
     let msg = "PR waiting for my review \\n"
-    let result = []
+    var result = []
     let authorizedRequest = await axios.create({
         timeout: 2000,
         headers: {
@@ -54,14 +54,21 @@ const checkPendingReview = async () => {
             'Content-Type': 'application/json'
         }
     })
-    process.env.GIT_REPO.split(',').forEach(async (repo) => {
+    let repos = process.env.GIT_REPO.split(',')
+    if (!Array.isArray(repos)) {
+        return
+    }
+    for (let i = 0; i < repos.length; i++) {
         try {
+            let repo = repos[i]
             let res = await authorizedRequest.get('https://api.github.com/repos/' + repo + '/pulls')
-            result.push(filterMyReview(res.data))
+            result = result.concat(filterMyReview(res.data))
         } catch (err) {
             console.log(err)
         }
-    })
+
+    }
+
     if (result.length > 0) {
         result.forEach(r => {
             msg = msg + r + "\\n"
@@ -81,7 +88,6 @@ const filterMyReview = (data) => {
         if (!Array.isArray(i.requested_reviewers)) {
             return
         }
-
         i.requested_reviewers.forEach(r => {
 
             if (r.login == process.env.GIT_USERNAME) {
@@ -92,5 +98,5 @@ const filterMyReview = (data) => {
     return result
 }
 
-//checkAssignedIssues()
+checkAssignedIssues()
 checkPendingReview()
