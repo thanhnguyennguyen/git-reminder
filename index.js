@@ -31,16 +31,23 @@ const filterMyIssue = (data) => {
     if (!Array.isArray(data)) {
         return
     }
+    console.log("Issues assigned to you")
     data.forEach(i => {
         if (i.assignee.login == process.env.GIT_USERNAME) {
             count++
             msg = msg + i.html_url + "\\n"
+            console.log(i.html_url)
         }
     });
     if (count > 0) {
-        notifyTelegram(msg, process.env.TELEGRAM_TOKEN, process.env.TELEGRAM_CHAT)
-        notifySlack(msg, process.env.SLACK_HOOK_KEY, process.env.SLACK_CHANNEL, process.env.SLACK_BOTNAME, process.env.SLACK_BOT_ICON)
+        if (process.env.TELEGRAM_TOKEN == '' || process.env.TELEGRAM_CHAT == '') {
+            notifyTelegram(msg, process.env.TELEGRAM_TOKEN, process.env.TELEGRAM_CHAT)
+        }
+        if (process.env.SLACK_HOOK_KEY == '' || process.env.SLACK_CHANNEL == '') {
+            notifySlack(msg, process.env.SLACK_HOOK_KEY, process.env.SLACK_CHANNEL, process.env.SLACK_BOTNAME, process.env.SLACK_BOT_ICON)
+        }
     }
+
 }
 
 // get list PR waiting for my review
@@ -70,11 +77,18 @@ const checkPendingReview = async () => {
     }
 
     if (result.length > 0) {
+        console.log("PR waiting for your review")
         result.forEach(r => {
             msg = msg + r + "\\n"
+            console.log(r)
         })
-        notifyTelegram(msg, process.env.TELEGRAM_TOKEN, process.env.TELEGRAM_CHAT)
-        notifySlack(msg, process.env.SLACK_HOOK_KEY, process.env.SLACK_CHANNEL, process.env.SLACK_BOTNAME, process.env.SLACK_BOT_ICON)
+        if (process.env.TELEGRAM_TOKEN == '' || process.env.TELEGRAM_CHAT == '') {
+            notifyTelegram(msg, process.env.TELEGRAM_TOKEN, process.env.TELEGRAM_CHAT)
+        }
+        if (process.env.SLACK_HOOK_KEY == '' || process.env.SLACK_CHANNEL == '') {
+            notifySlack(msg, process.env.SLACK_HOOK_KEY, process.env.SLACK_CHANNEL, process.env.SLACK_BOTNAME, process.env.SLACK_BOT_ICON)
+        }
+        console.log(msg)
     }
 }
 
