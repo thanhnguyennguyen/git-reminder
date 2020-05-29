@@ -40,10 +40,10 @@ const filterMyIssue = (data) => {
         }
     });
     if (count > 0) {
-        if (process.env.TELEGRAM_TOKEN == '' || process.env.TELEGRAM_CHAT == '') {
+        if (process.env.TELEGRAM_TOKEN != '' && process.env.TELEGRAM_CHAT != '') {
             notifyTelegram(msg, process.env.TELEGRAM_TOKEN, process.env.TELEGRAM_CHAT)
         }
-        if (process.env.SLACK_HOOK_KEY == '' || process.env.SLACK_CHANNEL == '') {
+        if (process.env.SLACK_HOOK_KEY != '' && process.env.SLACK_CHANNEL != '') {
             notifySlack(msg, process.env.SLACK_HOOK_KEY, process.env.SLACK_CHANNEL, process.env.SLACK_BOTNAME, process.env.SLACK_BOT_ICON)
         }
     }
@@ -82,10 +82,10 @@ const checkPendingReview = async () => {
             msg = msg + r + "\\n"
             console.log(r)
         })
-        if (process.env.TELEGRAM_TOKEN == '' || process.env.TELEGRAM_CHAT == '') {
+        if (process.env.TELEGRAM_TOKEN != '' && process.env.TELEGRAM_CHAT != '') {
             notifyTelegram(msg, process.env.TELEGRAM_TOKEN, process.env.TELEGRAM_CHAT)
         }
-        if (process.env.SLACK_HOOK_KEY == '' || process.env.SLACK_CHANNEL == '') {
+        if (process.env.SLACK_HOOK_KEY != '' && process.env.SLACK_CHANNEL != '') {
             notifySlack(msg, process.env.SLACK_HOOK_KEY, process.env.SLACK_CHANNEL, process.env.SLACK_BOTNAME, process.env.SLACK_BOT_ICON)
         }
         console.log(msg)
